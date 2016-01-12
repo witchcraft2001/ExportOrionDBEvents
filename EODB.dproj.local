@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.951,=C:\Users\dmitry\Documents\RAD Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.661,D:\dev\delphi\OrionExportDB\Main.dfm=C:\Users\dmitry\Documents\RAD Studio\Projects\Unit2.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.661,D:\dev\delphi\OrionExportDB\Main.pas=C:\Users\dmitry\Documents\RAD Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.753,D:\dev\delphi\OrionExportDB\EODB.dproj=C:\Users\dmitry\Documents\RAD Studio\Projects\Project2.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

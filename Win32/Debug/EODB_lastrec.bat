@@ -1,0 +1,1 @@
+EODB.exe /pathdb d:\dev\cs\ParadoxReader\BASE_SKUD\ /output d:\dev\ /filter flt.txt /lastrec /qname perpeto /export
