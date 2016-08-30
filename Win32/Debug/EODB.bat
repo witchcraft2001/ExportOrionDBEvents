@@ -1,1 +1,0 @@
-EODB.exe /pathdb d:\dev\cs\ParadoxReader\BASE_SKUD\ /output d:\dev\ /period 60 /filter flt.txt /export
