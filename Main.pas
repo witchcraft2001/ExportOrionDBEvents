@@ -8,7 +8,6 @@ uses
   Vcl.Samples.Spin, DB, ADODB, Bde.DBTables,DateUtils, inifiles;
 
 const
-  //ConnectStr='Provider=Microsoft.Jet.OLEDB.4.0;Data Source=%s;Extended Properties=Paradox 5.x';
   PrgName = 'ExportOrionDB';
   PrgFriendName = 'Экспорт данных из БД Орион';
   PrgVersion = 'v.0.1.110116';
@@ -95,36 +94,27 @@ begin
   Val(Text,i,code);
   if code <> 0 then begin
     for i := 1 to Text.Length do begin
-{      if not ((ord(Text[i]) >= ord('1')) and (ord(Text[i]) <= ord('0')))  then begin
-        isCipher:=false;
-      end;}
       if Text[i] = '"' then begin
         res:=res+'"';
-  //      j:=j+1;
       end;
       res:=res + Text[i];
-  //    j:=j+1;
     end;
     isCipher := false
   end else begin
     isCipher := true;
     res:=Text;
   end;
-//  res[j]:=chr(0);
   if not isCipher then result:= '"' + res+ '"'
     else result:=res;
 end;
 
 procedure TMainForm.btnExportClick(Sender: TObject);
 var
-        //MQuery:TADOQuery;
-//        strTimeFrom:string;
-        strTime:string;
-//        listFields:TStrings;
-        I, J:integer;
-        fileOut:TextFile;
-        timeFrom: TDateTime;
-        timeTo: TDateTime;
+  strTime:string;
+  I, J:integer;
+  fileOut:TextFile;
+  timeFrom: TDateTime;
+  timeTo: TDateTime;
   X: Integer;
   str1,str2:string;
   flt:boolean;
@@ -133,7 +123,6 @@ var
 begin
         Log(1,'Подготовка к экспорту');
         if (strQueryName.Length = 0) then strQueryName := 'NoNamedQuery';
-        //timeTo:=EncodeDateTime(2015,9,8,8,0,0,0);
         Log(2,'Подключение к БД: '+textPath.Text);
         try
           OrionDB.Params.Add('PATH=' + textPath.Text);
@@ -218,7 +207,6 @@ begin
             J:=0;
             while not MQuery.Eof do begin
                 flt:=false;
-              //for I := 0 to listFields.Count-1 do begin
                 if strFilter.Count>0 then begin
                   for X := 0 to strFilter.Count-1 do begin
                     str1 := copy(strFilter[X],1,Pos('=',strFilter[X])-1);
@@ -243,7 +231,6 @@ begin
                       end;
                       Write(fileOut,Text2CSVField(MQuery.Fields[I].AsString));
                   end;
-                    //ShowMessage(MQuery.Fields[I].AsString);
                   WriteLn(fileOut);
                   J:=J+1;
                 end;
@@ -258,36 +245,8 @@ begin
             Log(2,'Выгружено в файл ' + IntToStr(J) + ' строк.');
           end;
         end;
-        //ShowMessage('OK');
         OrionDB.Connected:=False;
         Log(2,'Операция завершена.');
-{        MyConnection.ConnectionString:=Format(ConnectStr,[textPath.Text]);
-        MyConnection.Connected := true;
-        AssignFile(fileOut, textOutput.Text + '\Test.txt');
-        Rewrite(fileOut);
-        MQuery:=TADOQuery.Create(nil);
-        MQuery.Connection:=MyConnection;
-        strTimeFrom:='#08/08/2015 08:15:00#';
-        strTimeTo:='#08/08/2015 08:20:00#';
-        MQuery.SQL.Text:=StringReplace(textQuery.Text,'%timefrom%',strTimeFrom,[rfReplaceAll, rfIgnoreCase]);
-        MQuery.SQL.Text:=StringReplace(MQuery.SQL.Text,'%timeto%',strTimeTo,[rfReplaceAll, rfIgnoreCase]);
-        //ShowMessage(MQuery.SQL.Text);
-        MQuery.Active:=true;
-//        MQuery.Fields.GetFieldNames(listFields);
-        while not MQuery.Eof do begin
-          //for I := 0 to listFields.Count-1 do begin
-          for I := 0 to MQuery.Fields.Count-1 do begin
-            if I>0 then begin
-              Write(fileOut,', ');
-            end;
-            Write(fileOut,'"',MQuery.Fields[I].AsString,'"');
-            //ShowMessage(MQuery.Fields[I].AsString);
-          end;
-          WriteLn(fileOut);
-          MQuery.Next;
-        end;
-        CloseFile(fileOut);
-        MyConnection.Connected:=false;}
 end;
 
 procedure TMainForm.btnPathClick(Sender: TObject);
@@ -296,7 +255,6 @@ var
 begin
   dir:=textPath.Text;
   if SelectDirectory(dir, [sdPrompt], 1000) then textPath.Text:=dir;
-//  'Выберите папку, где расположена БД Орион', textPath.Text, textPath.Text);
 end;
 
 procedure TMainForm.btnOutputPathClick(Sender: TObject);
@@ -304,7 +262,6 @@ var
   dir:string;
 begin
   dir:=textOutput.Text;
-//  if GetFolderDialog(Application.Handle, 'Выбрать папку на Delphi (Дельфи)', sFolder) then
   if SelectDirectory(dir, [sdAllowCreate, sdPerformCreate, sdPrompt], 1000) then textOutput.Text:=dir;
 end;
 
@@ -326,21 +283,12 @@ begin
         if LogLevel=0 then LogLevel := 5;
         temp:=FormatDateTime('yymmdd', Now);
         LogFileName := GetTempDirectory + PrgName+'_'+temp+'.log';
-//        showmessage(logfilename);
-{        if FileExists(ExtractFilePath(Application.ExeName)+'dbimporter.log') then begin
-                AssignFile(LogFile,ExtractFilePath(Application.ExeName)+'dbimporter.log');
-                Append(LogFile);
-        end else begin
-                AssignFile(LogFile,ExtractFilePath(Application.ExeName)+'dbimporter.log');
-                Rewrite(LogFile);
-        end;          }
         try
           AssignFile(LogFile,LogFileName);
         i:=FileMode;
         FileMode:=fmOpenWrite;
         if FileExists(LogFileName) then Append(LogFile)
           else ReWrite(LogFile);
-//        Rewrite(LogFile);
         fileMode:=i;
 
         Log(1,'#-------------------------------#');
@@ -454,19 +402,6 @@ end;
 procedure TMainForm.FormShow(Sender: TObject);
 begin
     if interactiveRun then Log(1,'Приложение запущено в интерактивном режиме!');
-
-{    if paramPathDB <> '' then begin
-        textPath.Text:=paramPathDB;
-//        Log(1,'PathToDB = ' + paramPathDB);
-    end;
-    if paramOutput <> '' then begin
-        textOutput.Text:=paramOutput;
-//        Log(1,'Output = ' + paramOutput);
-    end;
-    if paramPeriod <> 0 then begin
-        textPeriod.Value:=paramPeriod;
-//        Log(1,'Period = ' + IntToStr(paramPeriod));
-    end;}
 end;
 
 end.
